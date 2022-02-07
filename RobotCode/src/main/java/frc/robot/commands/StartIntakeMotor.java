@@ -4,22 +4,16 @@
 
 package frc.robot.commands;
 
-//import java.util.function.DoubleSupplier;
-
-//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants.ShooterConstants;
-import frc.robot.subsystems.Flywheel;
+import frc.robot.subsystems.Intake;
 
-public class SetFlywheelVelocity extends CommandBase {
-  /** Creates a new SetShooterVelocity. */
-  private final Flywheel flywheel;
-  //private final double velocity;
-  public SetFlywheelVelocity(Flywheel subsystem) {
+public class StartIntakeMotor extends CommandBase {
+  /** Creates a new StartIntakeMotor. */
+  private final Intake intake;
+  public StartIntakeMotor(Intake subsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
-    //velocity = velocitySource;
-    flywheel = subsystem;
-    addRequirements(flywheel);
+    intake = subsystem;
+    addRequirements(intake);
   }
 
   // Called when the command is initially scheduled.
@@ -29,15 +23,12 @@ public class SetFlywheelVelocity extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    //flywheel.setVelocity(ShooterConstants.maxRPM);
-    flywheel.setSpeed(-0.7);
+    intake.startIntakeMotor(-0.9);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    flywheel.stop();
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override

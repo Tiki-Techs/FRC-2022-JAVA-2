@@ -4,6 +4,9 @@
 
 package frc.robot.subsystems;
 
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
@@ -17,7 +20,8 @@ public class Intake extends SubsystemBase {
   //Creates two DoubleSolenoids for each side of intake
   private DoubleSolenoid intake = 
       new DoubleSolenoid(2, PneumaticsModuleType.REVPH, IntakeConstants.INTAKE_FORWARD_CHANNEL, IntakeConstants.INTAKE_REVERSE_CHANNEL);
-  
+      
+  private CANSparkMax m_intakeMotor = new CANSparkMax(IntakeConstants.INTAKE_MOTOR_ID, MotorType.kBrushless);
   //Initalize pistons as closed
   public Intake() {
     intake.set(Value.kReverse);
@@ -31,6 +35,14 @@ public class Intake extends SubsystemBase {
   //Retracts Intake
   public void retractIntake(){
     intake.set(Value.kReverse);
+  }
+
+  public void startIntakeMotor(double speed){
+    m_intakeMotor.set(speed);
+  }
+
+  public void stopIntakeMotor(){
+    m_intakeMotor.set(0);
   }
 
   //Call to check if pistons are open(checks right side)

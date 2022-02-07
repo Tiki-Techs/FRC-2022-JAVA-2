@@ -29,6 +29,7 @@ public final class Constants {
     public static final class IntakeConstants{
         public static final int INTAKE_FORWARD_CHANNEL = 2;
         public static final int INTAKE_REVERSE_CHANNEL = 13;
+        public static final int INTAKE_MOTOR_ID = 9;
     }
 
     public static final class DriveConstants{
