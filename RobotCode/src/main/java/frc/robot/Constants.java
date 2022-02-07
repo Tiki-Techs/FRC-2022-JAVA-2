@@ -27,10 +27,8 @@ public final class Constants {
         public static final double PIDTolerance = 0;
     }
     public static final class IntakeConstants{
-        public static final int RIGHT_PISTON_FORWARD_CHANNEL = 10;
-        public static final int RIGHT_PISTON_REVERSE_CHANNEL = 11;
-        public static final int LEFT_PISTON_FORWARD_CHANNEL = 12;
-        public static final int LEFT_PISTON_REVERSE_CHANNEL = 13;
+        public static final int INTAKE_FORWARD_CHANNEL = 2;
+        public static final int INTAKE_REVERSE_CHANNEL = 13;
     }
 
     public static final class DriveConstants{

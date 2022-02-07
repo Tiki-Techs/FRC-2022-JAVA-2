@@ -15,32 +15,27 @@ public class Intake extends SubsystemBase {
   /** Creates a new Intake. */
 
   //Creates two DoubleSolenoids for each side of intake
-  private DoubleSolenoid rightPiston = 
-      new DoubleSolenoid(PneumaticsModuleType.REVPH, IntakeConstants.RIGHT_PISTON_FORWARD_CHANNEL, IntakeConstants.RIGHT_PISTON_REVERSE_CHANNEL);
-  private DoubleSolenoid leftPiston = 
-      new DoubleSolenoid(PneumaticsModuleType.REVPH, IntakeConstants.LEFT_PISTON_FORWARD_CHANNEL, IntakeConstants.LEFT_PISTON_REVERSE_CHANNEL);
+  private DoubleSolenoid intake = 
+      new DoubleSolenoid(2, PneumaticsModuleType.REVPH, IntakeConstants.INTAKE_FORWARD_CHANNEL, IntakeConstants.INTAKE_REVERSE_CHANNEL);
   
   //Initalize pistons as closed
   public Intake() {
-    rightPiston.set(Value.kReverse);
-    leftPiston.set(Value.kReverse);
+    intake.set(Value.kReverse);
   }
 
   //Extend Intake
   public void extendIntake(){
-    rightPiston.set(Value.kForward);
-    leftPiston.set(Value.kForward);
+    intake.set(Value.kForward);
   }
 
   //Retracts Intake
   public void retractIntake(){
-    rightPiston.set(Value.kReverse);
-    leftPiston.set(Value.kReverse);
+    intake.set(Value.kReverse);
   }
 
   //Call to check if pistons are open(checks right side)
   public boolean intakeOut(){
-    if(rightPiston.get().equals(Value.kForward)){
+    if(intake.get().equals(Value.kForward)){
       return true;
     }
     else{
