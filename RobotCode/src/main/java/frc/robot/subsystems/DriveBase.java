@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
@@ -25,12 +26,16 @@ public class DriveBase extends SubsystemBase {
     //Sets followers to follow masters
     m_rightFollower.follow(m_rightMaster);
     m_leftFollower.follow(m_leftMaster);
+
     //Set masters to run opposite on each side and follower to run opposite their master
     m_rightMaster.setInverted(TalonFXInvertType.Clockwise);
     m_leftMaster.setInverted(TalonFXInvertType.Clockwise);
     m_leftFollower.setInverted(true);
     m_rightFollower.setInverted(true);
 
+    //Setup Integrated Encoders
+    m_leftMaster.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
+    m_rightMaster.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
   }
 
   //Differential tankDrive function for calling in Container
@@ -38,6 +43,21 @@ public class DriveBase extends SubsystemBase {
     m_drive.arcadeDrive(speed, angle);
   }
 
+  public double getRightEncoderPos(){
+    return m_rightMaster.getSelectedSensorPosition();
+  }
+public double getLeftEncoderPos(){
+    return m_leftMaster.getSelectedSensorPosition();
+  }
+
+  public void resetEncoderPos(){
+    m_leftMaster.setSelectedSensorPosition(0);
+    m_rightMaster.setSelectedSensorPosition(0);
+  }
+
+  public double getAverageEncoderDistance(){
+    return (m_rightMaster.getSelectedSensorPosition() + m_leftMaster.getSelectedSensorPosition()) / 2;
+  }
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
@@ -45,5 +65,9 @@ public class DriveBase extends SubsystemBase {
     SmartDashboard.putNumber("right follow", m_rightFollower.get());
     SmartDashboard.putNumber("left  follow", m_leftFollower.get());
     SmartDashboard.putNumber("left master", m_leftMaster.get());
+    
+    SmartDashboard.putNumber("right encoder", m_rightMaster.getSelectedSensorPosition());
+    SmartDashboard.putNumber("left encoder", m_leftMaster.getSelectedSensorPosition());
+
   }
 }

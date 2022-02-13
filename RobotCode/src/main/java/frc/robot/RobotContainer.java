@@ -7,6 +7,7 @@ package frc.robot;
 import javax.management.Descriptor;
 
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -41,6 +42,7 @@ public class RobotContainer {
 
 
   private XboxController driverController = new XboxController(Constants.DRIVER_CONTROLLER_ID);
+      
   //private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
   
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -63,20 +65,21 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     
-    new JoystickButton(driverController, 3)
+    new JoystickButton(driverController, 1) //A Button
+      .whenHeld(new SetFlywheelVelocity(m_flywheel));
+    new JoystickButton(driverController, 2) //B Button
+      .whenHeld(new StartIntakeMotor(m_intake));
+
+    new JoystickButton(driverController, 3) //X Button
       .whenPressed(new ExtendIntake(m_intake));
-    new JoystickButton(driverController, 4)
+    new JoystickButton(driverController, 4) //Y Button
       .whenPressed(new RetractIntake(m_intake));
 
-    new JoystickButton(driverController, 5)
+    new JoystickButton(driverController, 5) //LB (left trigger button)
       .whenPressed(new ShiftSpeed(m_shifter));
-    new JoystickButton(driverController, 6)
+    new JoystickButton(driverController, 6) //RB (right trigger button)
       .whenPressed(new ShiftTorque(m_shifter));
 
-    new JoystickButton(driverController, 1)
-      .whenHeld(new SetFlywheelVelocity(m_flywheel));
-    new JoystickButton(driverController, 2)
-      .whenHeld(new StartIntakeMotor(m_intake));
   }
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

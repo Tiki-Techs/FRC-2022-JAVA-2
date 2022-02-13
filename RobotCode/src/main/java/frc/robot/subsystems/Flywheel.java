@@ -19,9 +19,11 @@ public class Flywheel extends SubsystemBase {
   private RelativeEncoder m_encoder;
   private CANSparkMax m_shooterMotor = new CANSparkMax(ShooterConstants.SHOOTER_MOTOR_ID, MotorType.kBrushless);
   private double targetVelocity = 0;
+  private double shooterSpeed;
 
   public Flywheel() {
     //Set up motor, PIDController, and encoder
+    SmartDashboard.putNumber("shooter speed", 0);
     m_shooterMotor.restoreFactoryDefaults();
 
     m_pidController = m_shooterMotor.getPIDController();
@@ -47,7 +49,7 @@ public class Flywheel extends SubsystemBase {
 
   //sets static speed for motor testing
   public void setSpeed(double speed) {
-    m_shooterMotor.set(speed);
+    m_shooterMotor.set(shooterSpeed);
   }
 
   //stops motor
@@ -65,5 +67,6 @@ public class Flywheel extends SubsystemBase {
   public void periodic() {
     SmartDashboard.putNumber("Shooter Motor", m_shooterMotor.get());
     SmartDashboard.putNumber("vel", m_encoder.getVelocity());
+    shooterSpeed = SmartDashboard.getNumber("shooter speed", 0);
   }
 }

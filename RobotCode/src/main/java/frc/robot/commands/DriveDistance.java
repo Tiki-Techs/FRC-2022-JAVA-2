@@ -4,46 +4,44 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
-//import java.util.function.DoubleSupplier;
-
-//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants.ShooterConstants;
-import frc.robot.subsystems.Flywheel;
+import frc.robot.subsystems.DriveBase;
 
-public class SetFlywheelVelocity extends CommandBase {
-  /** Creates a new SetShooterVelocity. */
-  private final Flywheel flywheel;
-  //private final double velocity;
-  public SetFlywheelVelocity(Flywheel subsystem) {
+public class DriveDistance extends CommandBase {
+  /** Creates a new DriveDistance. */
+  private final DriveBase driveBase;
+  private final double distanceToDrive;
+  private final double speedToDrive;
+
+  public DriveDistance(double inches, double speed, DriveBase subsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
-    //velocity = velocitySource;
-    flywheel = subsystem;
-    addRequirements(flywheel);
+    distanceToDrive = inches;
+    speedToDrive = speed;
+    driveBase = subsystem;
+    addRequirements(driveBase);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    driveBase.resetEncoderPos();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    //flywheel.setVelocity(ShooterConstants.maxRPM);
-    flywheel.setSpeed(-0.7);
+    driveBase.arcadeDrive(speedToDrive, 0);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    flywheel.stop();
+    driveBase.arcadeDrive(0, 0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return Math.abs(driveBase.getAverageEncoderDistance()) >= distanceToDrive;
   }
 }

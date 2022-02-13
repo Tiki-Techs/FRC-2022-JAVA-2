@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -14,7 +16,7 @@ package frc.robot;
  */
 public final class Constants {
     public static final class ShooterConstants{
-        public static final double kP = 6e-5;
+        public static final double kP = 0;
         public static final double kI = 0;
         public static final double kD = 0;
         public static final double kIZone = 0;
@@ -29,7 +31,7 @@ public final class Constants {
     public static final class IntakeConstants{
         public static final int INTAKE_FORWARD_CHANNEL = 2;
         public static final int INTAKE_REVERSE_CHANNEL = 13;
-        public static final int INTAKE_MOTOR_ID = 9;
+        public static final int INTAKE_MOTOR_ID = 10;
     }
 
     public static final class DriveConstants{
@@ -37,11 +39,16 @@ public final class Constants {
         public static final int LEFT_MOTOR_2_ID = 5;
         public static final int RIGHT_MOTOR_1_ID = 6;
         public static final int RIGHT_MOTOR_2_ID = 7;
+
+        public static final int DRIVE_ENCODER_CPR = 0;
+        public static final double DRIVE_WHEEL_DIAMETER = 6;
+        public static final double ENCODER_DISTANCE_PER_PULSE = 
+            (DRIVE_WHEEL_DIAMETER * Math.PI) / (double) DRIVE_ENCODER_CPR;
     }
     
     public static final class ShiftConstants{
-        public static final int SHIFTER_FORWARD_CHANNEL = 4;            
-        public static final int SHIFTER_REVERSE_CHANNEL = 15;
+        public static final int SHIFTER_FORWARD_CHANNEL = 15;            
+        public static final int SHIFTER_REVERSE_CHANNEL = 0;
     }
 
     public static final int DRIVER_CONTROLLER_ID = 0;
