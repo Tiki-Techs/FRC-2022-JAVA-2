@@ -49,7 +49,7 @@ public class Flywheel extends SubsystemBase {
 
   //sets static speed for motor testing
   public void setSpeed(double speed) {
-    m_shooterMotor.set(shooterSpeed);
+    m_shooterMotor.set(speed);
   }
 
   //stops motor

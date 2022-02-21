@@ -25,13 +25,14 @@ public final class Constants {
         public static final double kMinOutput = -1;
         public static final double maxRPM = 5700;
 
-        public static final int SHOOTER_MOTOR_ID = 8;
+        public static final int SHOOTER_MOTOR_ID = 11;
         public static final double PIDTolerance = 0;
     }
     public static final class IntakeConstants{
-        public static final int INTAKE_FORWARD_CHANNEL = 2;
-        public static final int INTAKE_REVERSE_CHANNEL = 13;
-        public static final int INTAKE_MOTOR_ID = 10;
+        public static final int INTAKE_FORWARD_CHANNEL = 13;
+        public static final int INTAKE_REVERSE_CHANNEL = 2;
+        public static final int INTAKE_MOTOR_ID = 12;
+        public static final int INDEX_MOTOR_ID = 10;
     }
 
     public static final class DriveConstants{
@@ -47,8 +48,8 @@ public final class Constants {
     }
     
     public static final class ShiftConstants{
-        public static final int SHIFTER_FORWARD_CHANNEL = 15;            
-        public static final int SHIFTER_REVERSE_CHANNEL = 0;
+        public static final int SHIFTER_FORWARD_CHANNEL = 4;            
+        public static final int SHIFTER_REVERSE_CHANNEL = 15;
     }
 
     public static final int DRIVER_CONTROLLER_ID = 0;

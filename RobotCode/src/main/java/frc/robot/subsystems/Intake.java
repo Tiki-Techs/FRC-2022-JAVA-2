@@ -22,6 +22,7 @@ public class Intake extends SubsystemBase {
       new DoubleSolenoid(2, PneumaticsModuleType.REVPH, IntakeConstants.INTAKE_FORWARD_CHANNEL, IntakeConstants.INTAKE_REVERSE_CHANNEL);
       
   private CANSparkMax m_intakeMotor = new CANSparkMax(IntakeConstants.INTAKE_MOTOR_ID, MotorType.kBrushless);
+  private CANSparkMax m_indexMotor = new CANSparkMax(IntakeConstants.INDEX_MOTOR_ID, MotorType.kBrushless);
   //Initalize pistons as closed
   public Intake() {
     intake.set(Value.kReverse);
@@ -44,6 +45,15 @@ public class Intake extends SubsystemBase {
   public void stopIntakeMotor(){
     m_intakeMotor.set(0);
   }
+
+  public void startIndexMotor(double speed){
+    m_indexMotor.set(speed);
+  }
+
+  public void stopIndexMotor(){
+    m_indexMotor.set(0);
+  }
+
 
   //Call to check if pistons are open(checks right side)
   public boolean intakeOut(){

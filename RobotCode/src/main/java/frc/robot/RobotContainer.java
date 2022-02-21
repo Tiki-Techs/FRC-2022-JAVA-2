@@ -21,6 +21,7 @@ import frc.robot.commands.ExtendIntake;
 import frc.robot.commands.RetractIntake;
 import frc.robot.commands.ShiftSpeed;
 import frc.robot.commands.ShiftTorque;
+import frc.robot.commands.StartIndexMotor;
 import frc.robot.commands.StartIntakeMotor;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shifter;
@@ -69,6 +70,8 @@ public class RobotContainer {
       .whenHeld(new SetFlywheelVelocity(m_flywheel));
     new JoystickButton(driverController, 2) //B Button
       .whenHeld(new StartIntakeMotor(m_intake));
+    new JoystickButton(driverController, 7) //Back Button
+      .whenHeld(new StartIndexMotor(m_intake));
 
     new JoystickButton(driverController, 3) //X Button
       .whenPressed(new ExtendIntake(m_intake));
