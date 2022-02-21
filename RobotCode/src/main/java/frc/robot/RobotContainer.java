@@ -4,10 +4,7 @@
 
 package frc.robot;
 
-import javax.management.Descriptor;
-
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -17,10 +14,6 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.SetFlywheelVelocity;
 import frc.robot.commands.StopFlywheel;
 import frc.robot.commands.stopIntakeMotor;
-import frc.robot.commands.ExtendIntake;
-import frc.robot.commands.RetractIntake;
-import frc.robot.commands.ShiftSpeed;
-import frc.robot.commands.ShiftTorque;
 import frc.robot.commands.StartIndexMotor;
 import frc.robot.commands.StartIntakeMotor;
 import frc.robot.subsystems.Intake;
@@ -69,20 +62,19 @@ public class RobotContainer {
     new JoystickButton(driverController, 1) //A Button
       .whenHeld(new SetFlywheelVelocity(m_flywheel));
     new JoystickButton(driverController, 2) //B Button
-      .whenHeld(new StartIntakeMotor(m_intake));
+      .whileActiveOnce(new RunCommand(() -> m_intake.startIntakeMotor(0.7), m_intake));
     new JoystickButton(driverController, 7) //Back Button
-      .whenHeld(new StartIndexMotor(m_intake));
+      .whileActiveOnce(new RunCommand(() -> m_intake.startIndexMotor(0.7), m_intake));
 
     new JoystickButton(driverController, 3) //X Button
-      .whenPressed(new ExtendIntake(m_intake));
+      .whenPressed(new InstantCommand(m_intake::extendIntake, m_intake));
     new JoystickButton(driverController, 4) //Y Button
-      .whenPressed(new RetractIntake(m_intake));
+      .whenPressed(new InstantCommand(m_intake::retractIntake, m_intake));
 
     new JoystickButton(driverController, 5) //LB (left trigger button)
-      .whenPressed(new ShiftSpeed(m_shifter));
+      .whenPressed(new InstantCommand(m_shifter::setSpeed, m_shifter));
     new JoystickButton(driverController, 6) //RB (right trigger button)
-      .whenPressed(new ShiftTorque(m_shifter));
-
+      .whenPressed(new InstantCommand(m_shifter::setTorque, m_shifter));
   }
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
