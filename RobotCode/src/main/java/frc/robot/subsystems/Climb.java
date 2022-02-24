@@ -20,9 +20,14 @@ public class Climb extends SubsystemBase {
     rightClimbMotor.restoreFactoryDefaults();
   }
 
-  public void runClimb(double speed){
-    leftClimbMotor.set(speed);
+  public void climbDown(double speed){
+    //leftClimbMotor.set(speed);
     rightClimbMotor.set(-speed);
+  }
+
+  public void climbUp(double speed){
+    //leftClimbMotor.set(-speed);
+    rightClimbMotor.set(speed);
   }
 
   public void stopClimb(){

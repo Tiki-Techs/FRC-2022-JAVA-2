@@ -14,11 +14,11 @@ package frc.robot;
  */
 public final class Constants {
     public static final class ShooterConstants{
-        public static final double kP = 0;
+        public static final double kP = 0.00005;
         public static final double kI = 0;
         public static final double kD = 0;
         public static final double kIZone = 0;
-        public static final double kFeedForward = 0.0000015;
+        public static final double kFeedForward = 0.00019;
         public static final double kMaxOutput = 1;
         public static final double kMinOutput = -1;
         public static final double maxRPM = 5700;
@@ -28,15 +28,15 @@ public final class Constants {
     }
 
     public static final class IntakeConstants{
-        public static final int INTAKE_FORWARD_CHANNEL = 13;
-        public static final int INTAKE_REVERSE_CHANNEL = 2;
+        public static final int INTAKE_FORWARD_CHANNEL = 2;
+        public static final int INTAKE_REVERSE_CHANNEL = 13;
         public static final int INTAKE_MOTOR_ID = 12;
         public static final int INDEX_MOTOR_ID = 10;
     }
 
     public static final class ClimbConstants{
-        public static final int LEFT_CLIMB_MOTOR_ID = 0;
-        public static final int RIGHT_CLIMB_MOTOR_ID = 0;
+        public static final int LEFT_CLIMB_MOTOR_ID = 9;
+        public static final int RIGHT_CLIMB_MOTOR_ID = 8;
     }
 
     public static final class DriveConstants{

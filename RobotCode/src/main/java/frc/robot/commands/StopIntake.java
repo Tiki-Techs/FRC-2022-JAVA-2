@@ -5,16 +5,16 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Flywheel;
+import frc.robot.subsystems.Intake;
 
-public class StopFlywheel extends CommandBase {
-  /** Creates a new StopFlywheel. */
-  private final Flywheel flywheel;
-
-  public StopFlywheel(Flywheel subsystem) {
+public class StopIntake extends CommandBase {
+  /** Creates a new stopIntakeMotor. */
+  private final Intake intake;
+  public StopIntake(Intake subsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
-    flywheel = subsystem;
-    addRequirements(flywheel);
+    intake = subsystem;
+    addRequirements(intake);
+
   }
 
   // Called when the command is initially scheduled.
@@ -24,8 +24,8 @@ public class StopFlywheel extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    //flywheel.stop();
-    flywheel.setVelocity(0);
+    intake.stopIntakeMotor();
+    intake.stopIndexMotor();
   }
 
   // Called once the command ends or is interrupted.
