@@ -11,6 +11,7 @@
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
+      "/LiveWindow/Climb": "Subsystem",
       "/LiveWindow/DriveBase": "Subsystem",
       "/LiveWindow/Flywheel": "Subsystem",
       "/LiveWindow/Intake": "Subsystem",

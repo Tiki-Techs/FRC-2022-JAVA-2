@@ -9,9 +9,8 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.commands.SetFlywheelVelocity;
+import frc.robot.commands.DriveDistance;
 import frc.robot.commands.StopClimb;
 import frc.robot.commands.StopFlywheel;
 import frc.robot.commands.StopIntake;
@@ -37,6 +36,7 @@ public class RobotContainer {
 
 
   private XboxController driverController = new XboxController(Constants.DRIVER_CONTROLLER_ID);
+  private XboxController mechController = new XboxController(Constants.MECH_CONTROLLER_ID);
       
   //private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
   
@@ -48,10 +48,17 @@ public class RobotContainer {
     m_intake.setDefaultCommand(new StopIntake(m_intake));   
     m_climb.setDefaultCommand(new StopClimb(m_climb)); 
 
+    //Main drive code, left joystick for speed and right for angle
     m_robotDrive.setDefaultCommand(
-          new RunCommand(
-            () -> m_robotDrive.arcadeDrive(-driverController.getLeftX(), driverController.getRightY()), m_robotDrive));
+      new RunCommand(
+        () -> m_robotDrive.arcadeDrive(-driverController.getLeftX(), driverController.getRightY()), m_robotDrive));
+    
+    //Run climb off second controller's joysticks
+    m_climb.setDefaultCommand(
+      new RunCommand(
+        () -> m_climb.runClimb(mechController.getRightY(), mechController.getLeftY()), m_climb));
   }
+  
 
   /**
    * Use this method to define your button->command mappings. Buttons can be created by
@@ -67,13 +74,8 @@ public class RobotContainer {
       .whileActiveOnce(new RunCommand(() -> m_intake.startIntakeMotor(.5), m_intake));
     new JoystickButton(driverController, 6) //RB (right trigger button)
       .whileActiveOnce(new RunCommand(() -> m_intake.startIndexMotor(-0.7), m_intake));
-      new JoystickButton(driverController, 8) //Start Button
+    new JoystickButton(driverController, 8) //Start Button
       .whileActiveOnce(new RunCommand(() -> m_intake.startIndexMotor(0.7), m_intake));
-    new JoystickButton(driverController, 1) //A Button
-      .whileActiveOnce(new RunCommand(() -> m_climb.climbDown(.3), m_climb));
-    new JoystickButton(driverController, 2) //B Button
-      .whileActiveOnce(new RunCommand(() -> m_climb.climbUp(.3), m_climb));
-
     new JoystickButton(driverController, 3) //X Button
       .whenPressed(new InstantCommand(m_intake::extendIntake, m_intake));
     new JoystickButton(driverController, 4) //Y Button
@@ -84,6 +86,15 @@ public class RobotContainer {
     new JoystickButton(driverController, 10) //right joystick button
       .whenPressed(new InstantCommand(m_shifter::setTorque, m_shifter));
     
+    //Extra code for climb in case need second controllers joysticks(just so i dont have to rewrite)
+    // new JoystickButton(mechController, 1) //A Button
+    //   .whileActiveOnce(new RunCommand(() -> m_climb.rightClimbDown(.3), m_climb));
+    // new JoystickButton(mechController, 2) //B Button
+    //   .whileActiveOnce(new RunCommand(() -> m_climb.rightClimbUp(.3), m_climb));
+    // new JoystickButton(mechController, 3) //x Button
+    //   .whileActiveOnce(new RunCommand(() -> m_climb.leftClimbDown(.3), m_climb));
+    // new JoystickButton(mechController, 4) //Y Button
+    //   .whileActiveOnce(new RunCommand(() -> m_climb.leftClimbUp(.3), m_climb));
     }
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
@@ -92,6 +103,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     //return blank auto command
-    return new InstantCommand();
+    return new DriveDistance(250, .5, m_robotDrive);
   }
 }

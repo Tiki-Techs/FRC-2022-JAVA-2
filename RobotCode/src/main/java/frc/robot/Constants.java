@@ -45,8 +45,8 @@ public final class Constants {
         public static final int RIGHT_MOTOR_1_ID = 6;
         public static final int RIGHT_MOTOR_2_ID = 7;
 
-        public static final int DRIVE_ENCODER_CPR = 0;
-        public static final double DRIVE_WHEEL_DIAMETER = 6;
+        public static final int DRIVE_ENCODER_CPR = 2048;
+        public static final double DRIVE_WHEEL_DIAMETER = 4;
         public static final double ENCODER_DISTANCE_PER_PULSE = 
             (DRIVE_WHEEL_DIAMETER * Math.PI) / (double) DRIVE_ENCODER_CPR;
     }
@@ -57,5 +57,8 @@ public final class Constants {
     }
 
     public static final int DRIVER_CONTROLLER_ID = 0;
-    public static final int RIGHT_STICK_ID = 1;
+    public static final int MECH_CONTROLLER_ID = 1;
+    
+    //public static final int RIGHT_STICK_ID = 1;
+
 }
