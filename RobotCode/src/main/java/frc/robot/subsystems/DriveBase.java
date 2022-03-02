@@ -4,7 +4,6 @@
 
 package frc.robot.subsystems;
 
-import java.util.function.BooleanSupplier;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;

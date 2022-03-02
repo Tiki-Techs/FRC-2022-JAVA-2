@@ -76,6 +76,6 @@ public class Flywheel extends SubsystemBase {
     SmartDashboard.putBoolean("isOnTarget",isOnTarget().getAsBoolean());
     SmartDashboard.putBoolean("isNotOnTarget",isNotOnTarget().getAsBoolean());
 
-    SmartDashboard.putNumber("test", Math.abs(targetVelocity - m_encoder.getVelocity()));
+    SmartDashboard.putNumber("RPM Offset", Math.abs(targetVelocity - m_encoder.getVelocity()));
   }
 }

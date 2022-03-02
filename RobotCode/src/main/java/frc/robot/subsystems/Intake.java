@@ -24,10 +24,11 @@ public class Intake extends SubsystemBase {
       new DoubleSolenoid(2, PneumaticsModuleType.REVPH, IntakeConstants.INTAKE_FORWARD_CHANNEL, IntakeConstants.INTAKE_REVERSE_CHANNEL);
       
   private CANSparkMax m_susan = new CANSparkMax(IntakeConstants.INTAKE_MOTOR_ID, MotorType.kBrushless);
-  private CANSparkMax m_indexMotor = new CANSparkMax(IntakeConstants.INDEX_MOTOR_ID, MotorType.kBrushless);
   //Initalize pistons as closed
   public Intake() {
     intake.set(Value.kReverse);
+
+    m_susan.restoreFactoryDefaults();
   }
 
   //Extend Intake
@@ -48,22 +49,13 @@ public class Intake extends SubsystemBase {
     m_susan.set(0);
   }
 
-  public void startIndexMotor(double speed){
-    m_indexMotor.set(speed);
-  }
-
-  public void stopIndexMotor(){
-    m_indexMotor.set(0);
-  }
-
-
   //Call to check if pistons are open(checks right side)
-  public boolean isIntakeOut(){
+  public BooleanSupplier isIntakeOut(){
     if(intake.get().equals(Value.kForward)){
-      return  true;
+      return ()-> true;
     }
     else{
-      return false;
+      return ()-> false;
     }
   }
   @Override
@@ -71,6 +63,6 @@ public class Intake extends SubsystemBase {
     // This method will be called once per scheduler run
     //SmartDashboard.put("Right Piston", rightPiston.get());
     //SmartDashboard.putData("Left Piston", leftPiston.get());
-    //SmartDashboard.putData(intakeOut());
+    SmartDashboard.putBoolean("intakeOut?",isIntakeOut().getAsBoolean());
   }
 }

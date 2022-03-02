@@ -25,7 +25,6 @@ public class StopIntake extends CommandBase {
   @Override
   public void execute() {
     intake.stopIntakeMotor();
-    intake.stopIndexMotor();
   }
 
   // Called once the command ends or is interrupted.
