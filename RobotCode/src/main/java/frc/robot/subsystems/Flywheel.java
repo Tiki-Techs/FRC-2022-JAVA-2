@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import java.util.function.BooleanSupplier;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -18,8 +20,7 @@ public class Flywheel extends SubsystemBase {
   private SparkMaxPIDController m_pidController;
   private RelativeEncoder m_encoder;
   private CANSparkMax m_shooterMotor = new CANSparkMax(ShooterConstants.SHOOTER_MOTOR_ID, MotorType.kBrushless);
-  private double targetVelocity = 0;
-  private double shooterSpeed;
+  private double targetVelocity = 3000;
 
   public Flywheel() {
     //Set up motor, PIDController, and encoder
@@ -58,15 +59,23 @@ public class Flywheel extends SubsystemBase {
   }
 
   //Checks if motor is at Target Velocity
-  public boolean isOnTarget() {
-    boolean onTarget = Math.abs(targetVelocity - m_encoder.getVelocity()) <= ShooterConstants.PIDTolerance; 
+  public BooleanSupplier isOnTarget() {
+    BooleanSupplier onTarget = () -> Math.abs(targetVelocity - m_encoder.getVelocity()) <= ShooterConstants.PIDTolerance; 
+    return onTarget;
+  }
+
+  public BooleanSupplier isNotOnTarget() {
+    BooleanSupplier onTarget = () -> Math.abs(targetVelocity - m_encoder.getVelocity()) >= ShooterConstants.PIDTolerance; 
     return onTarget;
   }
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Shooter Motor", m_shooterMotor.get());
     SmartDashboard.putNumber("vel", m_encoder.getVelocity());
-    shooterSpeed = SmartDashboard.getNumber("shooter speed", 0);
+    //shooterSpeed = SmartDashboard.getNumber("shooter speed", 0);
+    SmartDashboard.putBoolean("isOnTarget",isOnTarget().getAsBoolean());
+    SmartDashboard.putBoolean("isNotOnTarget",isNotOnTarget().getAsBoolean());
+
+    SmartDashboard.putNumber("test", Math.abs(targetVelocity - m_encoder.getVelocity()));
   }
 }

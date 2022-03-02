@@ -7,8 +7,12 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.PerpetualCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.DriveDistance;
 import frc.robot.commands.StopClimb;
@@ -38,14 +42,12 @@ public class RobotContainer {
   private XboxController driverController = new XboxController(Constants.DRIVER_CONTROLLER_ID);
   private XboxController mechController = new XboxController(Constants.MECH_CONTROLLER_ID);
       
-  //private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
-  
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
     m_flywheel.setDefaultCommand(new StopFlywheel(m_flywheel));
-    m_intake.setDefaultCommand(new StopIntake(m_intake));   
+    m_intake.setDefaultCommand(new StopIntake(m_intake));
     m_climb.setDefaultCommand(new StopClimb(m_climb)); 
 
     //Main drive code, left joystick for speed and right for angle
@@ -57,9 +59,10 @@ public class RobotContainer {
     m_climb.setDefaultCommand(
       new RunCommand(
         () -> m_climb.runClimb(mechController.getRightY(), mechController.getLeftY()), m_climb));
+      
+    // new PerpetualCommand(new ConditionalCommand(()->m_intake.startIntakeMotor(.9), ()->m_intake.stopIntakeMotor(), m_intake.isIntakeOut()));
   }
   
-
   /**
    * Use this method to define your button->command mappings. Buttons can be created by
    * instantiating a {@link GenericHID} or one of its subclasses ({@link
@@ -70,21 +73,39 @@ public class RobotContainer {
     
     new JoystickButton(driverController, 7) //Back Button
       .whileActiveOnce(new RunCommand(() -> m_flywheel.setVelocity(-3000), m_flywheel));
+    new JoystickButton(driverController, 1) //A Button
+      .whileActiveOnce(new SequentialCommandGroup(
+        new RunCommand(()-> m_flywheel.setVelocity(-3000), m_flywheel).withInterrupt(m_flywheel.isOnTarget()),
+        new ParallelCommandGroup(
+          new RunCommand(()-> m_flywheel.setVelocity(-3000), m_flywheel),
+          new RunCommand(() -> m_intake.startIndexMotor(-0.7), m_intake)).withInterrupt(m_flywheel.isNotOnTarget()),
+        new InstantCommand(()-> m_intake.stopIndexMotor(), m_intake),
+        new RunCommand(()-> m_flywheel.setVelocity(-3000), m_flywheel).withInterrupt(m_flywheel.isOnTarget()),
+        new ParallelCommandGroup(
+          new RunCommand(()-> m_flywheel.setVelocity(-3000), m_flywheel),
+          new RunCommand(() -> m_intake.startIndexMotor(-0.7), m_intake)).withInterrupt(m_flywheel.isNotOnTarget())
+        ));
     new JoystickButton(driverController, 5) //LB (left trigger button)
-      .whileActiveOnce(new RunCommand(() -> m_intake.startIntakeMotor(.5), m_intake));
+      .whileActiveOnce(new RunCommand(() -> m_intake.startIntakeMotor(.9), m_intake));
+    new JoystickButton(mechController, 1) // A Button
+      .whileActiveOnce(new RunCommand(() -> m_intake.startIntakeMotor(-.9), m_intake));
     new JoystickButton(driverController, 6) //RB (right trigger button)
       .whileActiveOnce(new RunCommand(() -> m_intake.startIndexMotor(-0.7), m_intake));
     new JoystickButton(driverController, 8) //Start Button
       .whileActiveOnce(new RunCommand(() -> m_intake.startIndexMotor(0.7), m_intake));
     new JoystickButton(driverController, 3) //X Button
-      .whenPressed(new InstantCommand(m_intake::extendIntake, m_intake));
+      .whenPressed(new SequentialCommandGroup(
+        new InstantCommand(m_intake::extendIntake, m_intake), 
+        new RunCommand(() -> m_intake.startIntakeMotor(.9), m_intake)));
     new JoystickButton(driverController, 4) //Y Button
       .whenPressed(new InstantCommand(m_intake::retractIntake, m_intake));
-
     new JoystickButton(driverController, 9) //left joystick button
-      .whenPressed(new InstantCommand(m_shifter::setSpeed, m_shifter));
+      //.whenPressed(new InstantCommand(m_shifter::setSpeed, m_shifter));
+      .whenPressed(new ConditionalCommand(new InstantCommand(m_shifter::setTorque,m_shifter),
+        new InstantCommand(m_shifter::setSpeed,m_shifter), m_shifter.isInSpeed()));
     new JoystickButton(driverController, 10) //right joystick button
       .whenPressed(new InstantCommand(m_shifter::setTorque, m_shifter));
+    
     
     //Extra code for climb in case need second controllers joysticks(just so i dont have to rewrite)
     // new JoystickButton(mechController, 1) //A Button

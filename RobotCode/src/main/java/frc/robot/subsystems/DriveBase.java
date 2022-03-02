@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import java.util.function.BooleanSupplier;
+
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
@@ -69,14 +71,10 @@ public class DriveBase extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("right master", m_rightMaster.get());
-    SmartDashboard.putNumber("right follow", m_rightFollower.get());
-    SmartDashboard.putNumber("left  follow", m_leftFollower.get());
     SmartDashboard.putNumber("left master", m_leftMaster.get());
     
     SmartDashboard.putNumber("right encoder", m_rightMaster.getSelectedSensorPosition());
     SmartDashboard.putNumber("left encoder", m_leftMaster.getSelectedSensorPosition());
-
-    SmartDashboard.putNumber("distance per pulse", DriveConstants.ENCODER_DISTANCE_PER_PULSE);
 
     SmartDashboard.putNumber("distance driven", m_rightMaster.getSelectedSensorPosition() * DriveConstants.ENCODER_DISTANCE_PER_PULSE);
   }

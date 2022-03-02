@@ -24,7 +24,7 @@ public final class Constants {
         public static final double maxRPM = 5700;
 
         public static final int SHOOTER_MOTOR_ID = 11;
-        public static final double PIDTolerance = 0;
+        public static final double PIDTolerance = 150;
     }
 
     public static final class IntakeConstants{

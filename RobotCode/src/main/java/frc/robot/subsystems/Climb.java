@@ -17,6 +17,7 @@ public class Climb extends SubsystemBase {
   private CANSparkMax rightClimbMotor = new CANSparkMax(ClimbConstants.RIGHT_CLIMB_MOTOR_ID, MotorType.kBrushless);
 
   public Climb() {
+    //setup encoders
     leftClimbMotor.restoreFactoryDefaults();
     rightClimbMotor.restoreFactoryDefaults();
   }
@@ -24,6 +25,11 @@ public class Climb extends SubsystemBase {
   public void runClimb(double rspeed, double lspeed){
     leftClimbMotor.set(lspeed);
     rightClimbMotor.set(rspeed);
+  }
+
+  public void stopClimb(){
+    leftClimbMotor.set(0);
+    rightClimbMotor.set(0);
   }
   // public void rightClimbDown(double speed){
   //   rightClimbMotor.set(-speed);
@@ -41,11 +47,6 @@ public class Climb extends SubsystemBase {
   //   leftClimbMotor.set(-speed);
   // }
 
-  public void stopClimb(){
-    leftClimbMotor.set(0);
-    rightClimbMotor.set(0);
-  }
-  
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

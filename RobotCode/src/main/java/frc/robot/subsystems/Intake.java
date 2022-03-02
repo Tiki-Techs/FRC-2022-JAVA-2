@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import java.util.function.BooleanSupplier;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -21,7 +23,7 @@ public class Intake extends SubsystemBase {
   private DoubleSolenoid intake = 
       new DoubleSolenoid(2, PneumaticsModuleType.REVPH, IntakeConstants.INTAKE_FORWARD_CHANNEL, IntakeConstants.INTAKE_REVERSE_CHANNEL);
       
-  private CANSparkMax m_intakeMotor = new CANSparkMax(IntakeConstants.INTAKE_MOTOR_ID, MotorType.kBrushless);
+  private CANSparkMax m_susan = new CANSparkMax(IntakeConstants.INTAKE_MOTOR_ID, MotorType.kBrushless);
   private CANSparkMax m_indexMotor = new CANSparkMax(IntakeConstants.INDEX_MOTOR_ID, MotorType.kBrushless);
   //Initalize pistons as closed
   public Intake() {
@@ -39,11 +41,11 @@ public class Intake extends SubsystemBase {
   }
 
   public void startIntakeMotor(double speed){
-    m_intakeMotor.set(speed);
+    m_susan.set(speed);
   }
 
   public void stopIntakeMotor(){
-    m_intakeMotor.set(0);
+    m_susan.set(0);
   }
 
   public void startIndexMotor(double speed){
@@ -56,9 +58,9 @@ public class Intake extends SubsystemBase {
 
 
   //Call to check if pistons are open(checks right side)
-  public boolean intakeOut(){
+  public boolean isIntakeOut(){
     if(intake.get().equals(Value.kForward)){
-      return true;
+      return  true;
     }
     else{
       return false;
@@ -69,6 +71,6 @@ public class Intake extends SubsystemBase {
     // This method will be called once per scheduler run
     //SmartDashboard.put("Right Piston", rightPiston.get());
     //SmartDashboard.putData("Left Piston", leftPiston.get());
-    SmartDashboard.putBoolean("IntakeOut?", intakeOut());
+    //SmartDashboard.putData(intakeOut());
   }
 }
