@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -15,28 +17,35 @@ package frc.robot;
 public final class Constants {
     public static final class ShooterConstants{
         public static final double kP = 0.00005;
-        public static final double kI = 0;
-        public static final double kD = 0;
-        public static final double kIZone = 0;
-        public static final double kFeedForward = 0.00019;
+        public static final double kFeedForward = 0.000195;
         public static final double kMaxOutput = 1;
         public static final double kMinOutput = -1;
-        public static final double maxRPM = 5700;
 
+        public static final double ukP = 0.00005;
+        public static final double ukFeedForward = 0.0002;
+        public static final double ukMaxOutput = 1;
+        public static final double ukMinOutput = -1;
+
+        public static final double maxRPM = 5700;
+        public static final double PIDTolerance = 100;
         public static final int SHOOTER_MOTOR_ID = 11;
-        public static final double PIDTolerance = 150;
+        public static final int UPPER_SHOOTER_MOTOR_ID = 13;
     }
 
     public static final class IntakeConstants{
-        public static final int INTAKE_FORWARD_CHANNEL = 2;
-        public static final int INTAKE_REVERSE_CHANNEL = 13;
+        public static final int INTAKE_FORWARD_CHANNEL = 5;
+        public static final int INTAKE_REVERSE_CHANNEL = 2;
         public static final int INTAKE_MOTOR_ID = 12;
         public static final int INDEX_MOTOR_ID = 10;
-    }
+    } 
 
     public static final class ClimbConstants{
-        public static final int LEFT_CLIMB_MOTOR_ID = 9;
-        public static final int RIGHT_CLIMB_MOTOR_ID = 8;
+        public static final int LEFT_CLIMB_MOTOR_ID = 8;
+        //public static final int RIGHT_CLIMB_MOTOR_ID = 8;
+        public static final int CLIMB_FORWARD_CHANNEL = 0;
+        public static final int CLIMB_REVERSE_CHANNEL = 7;
+        public static final double CLIMB_STOP_POINT = 0;
+        //public static final int CLIMB_CURRENT_LIMIT = ;
     }
 
     public static final class DriveConstants{
@@ -52,8 +61,8 @@ public final class Constants {
     }
     
     public static final class ShiftConstants{
-        public static final int SHIFTER_FORWARD_CHANNEL = 4;            
-        public static final int SHIFTER_REVERSE_CHANNEL = 15;
+        public static final int SHIFTER_FORWARD_CHANNEL = 6;            
+        public static final int SHIFTER_REVERSE_CHANNEL = 1;
     }
 
     public static final int DRIVER_CONTROLLER_ID = 0;

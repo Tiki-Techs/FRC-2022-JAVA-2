@@ -16,6 +16,7 @@ public class Index extends SubsystemBase {
 
   public Index() {
     m_indexMotor.restoreFactoryDefaults();
+    m_indexMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
   }
 
   public void startIndexMotor(double speed){

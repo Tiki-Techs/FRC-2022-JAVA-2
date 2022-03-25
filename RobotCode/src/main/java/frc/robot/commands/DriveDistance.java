@@ -14,10 +14,12 @@ public class DriveDistance extends CommandBase {
   private final DriveBase driveBase;
   private final double distanceToDrive;
   private final double speedToDrive;
+  private final double angleOfDrive;
 
-  public DriveDistance(double inches, double speed, DriveBase subsystem) {
+  public DriveDistance(double inches, double speed, double angle, DriveBase subsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     distanceToDrive = inches;
+    angleOfDrive = angle;
     speedToDrive = speed;
     driveBase = subsystem;
     addRequirements(driveBase);
@@ -27,13 +29,12 @@ public class DriveDistance extends CommandBase {
   @Override
   public void initialize() {
     driveBase.resetEncoderPos();
-    SmartDashboard.putBoolean("test", false);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    driveBase.arcadeDrive(speedToDrive, 0);
+    driveBase.arcadeDrive(-speedToDrive, angleOfDrive);
     SmartDashboard.getNumber("distancetodrive", distanceToDrive);
   }
 
@@ -47,5 +48,6 @@ public class DriveDistance extends CommandBase {
   @Override
   public boolean isFinished() {
     return Math.abs(driveBase.getLeftEncoderPos() * DriveConstants.ENCODER_DISTANCE_PER_PULSE) >= distanceToDrive;
+            //|| Math.abs(driveBase.getRightEncoderPos() * DriveConstants.ENCODER_DISTANCE_PER_PULSE) <= distanceToDrive;
   }
 }

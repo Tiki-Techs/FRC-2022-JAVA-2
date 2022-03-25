@@ -4,8 +4,6 @@
 
 package frc.robot.subsystems;
 
-import java.util.function.BooleanSupplier;
-
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
@@ -16,10 +14,10 @@ import frc.robot.Constants.ShiftConstants;
 public class Shifter extends SubsystemBase {
   /** Creates a new Shifter. */
   private DoubleSolenoid shift = 
-    new DoubleSolenoid(2, PneumaticsModuleType.REVPH, ShiftConstants.SHIFTER_FORWARD_CHANNEL, ShiftConstants.SHIFTER_REVERSE_CHANNEL);
+    new DoubleSolenoid(2, PneumaticsModuleType.CTREPCM, ShiftConstants.SHIFTER_FORWARD_CHANNEL, ShiftConstants.SHIFTER_REVERSE_CHANNEL);
 
   public Shifter() {
-    shift.set(Value.kForward);
+    shift.set(Value.kReverse);
   }
 
   public void setSpeed(){
@@ -37,18 +35,18 @@ public class Shifter extends SubsystemBase {
     shift.set(Value.kOff);
   }
 
-  public BooleanSupplier isInSpeed(){
+  public boolean isInSpeed(){
     if(shift.get().equals(Value.kForward)){
-      return ()-> true;
+      return true;
     }
     else{
-      return ()-> false;
+      return false;
     }
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putBoolean("InSpeed?", isInSpeed().getAsBoolean());
+    SmartDashboard.putBoolean("InSpeed?", isInSpeed());
   }
 }

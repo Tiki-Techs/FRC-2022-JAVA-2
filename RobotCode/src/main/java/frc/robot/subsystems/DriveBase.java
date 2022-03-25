@@ -41,15 +41,10 @@ public class DriveBase extends SubsystemBase {
     m_rightMaster.setSelectedSensorPosition(0);
   }
 
-  //Differential tankDrive function for calling in Container
+  //Differential arcadeDrive function for calling in Container
   public void arcadeDrive(double speed, double angle){
     m_drive.arcadeDrive(speed, angle);
   }
-
-  // public void tankDrive(double lspeed, double rspeed){
-  //   m_drive.tankDrive(lspeed, rspeed);
-  //   //SmartDashboard.putBoolean("test", true);
-  // }
 
   public double getRightEncoderPos(){
     return m_rightMaster.getSelectedSensorPosition();
@@ -72,8 +67,8 @@ public class DriveBase extends SubsystemBase {
     SmartDashboard.putNumber("right master", m_rightMaster.get());
     SmartDashboard.putNumber("left master", m_leftMaster.get());
     
-    SmartDashboard.putNumber("right encoder", m_rightMaster.getSelectedSensorPosition());
-    SmartDashboard.putNumber("left encoder", m_leftMaster.getSelectedSensorPosition());
+    SmartDashboard.putNumber("right drive encoder", m_rightMaster.getSelectedSensorPosition());
+    SmartDashboard.putNumber("left drive encoder", m_leftMaster.getSelectedSensorPosition());
 
     SmartDashboard.putNumber("distance driven", m_rightMaster.getSelectedSensorPosition() * DriveConstants.ENCODER_DISTANCE_PER_PULSE);
   }
