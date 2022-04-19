@@ -60,15 +60,15 @@ public class DriveBase extends SubsystemBase {
       backLeft.setInverted(true);
       backRight.setInverted(true);
 
-      // frontRight.configFactoryDefault();
-      // backRight.configFactoryDefault();
-      // frontLeft.configFactoryDefault();
-      // backRight.configFactoryDefault();
+      frontRight.configFactoryDefault();
+      backRight.configFactoryDefault();
+      frontLeft.configFactoryDefault();
+      backRight.configFactoryDefault();
 
-      // configureTalon(frontRight);
-      // configureTalon(backRight);
-      // configureTalon(frontLeft);
-      // configureTalon(frontRight);
+      configureTalon(frontRight);
+      configureTalon(backRight);
+      configureTalon(frontLeft);
+      configureTalon(frontRight);
 
       // Sets the distance per pulse for the encoders
       resetEncoders();
@@ -79,11 +79,11 @@ public class DriveBase extends SubsystemBase {
     public void periodic() {
       // Update the odometry in the periodic block
 
-      // m_odometry.update(m_gyro.getRotation2d(),
-      //     frontLeft.getSelectedSensorPosition() / (DriveConstants.ENCODER_DISTANCE_PER_PULSE * DriveConstants.GEAR_RATIO
-      //         * Units.inchesToMeters(DriveConstants.DRIVE_WHEEL_DIAMETER * Math.PI)),
-      //     frontRight.getSelectedSensorPosition() / (DriveConstants.ENCODER_DISTANCE_PER_PULSE * DriveConstants.GEAR_RATIO
-      //         * Units.inchesToMeters(DriveConstants.DRIVE_WHEEL_DIAMETER * Math.PI)));
+      m_odometry.update(m_gyro.getRotation2d(),
+          frontLeft.getSelectedSensorPosition() / (DriveConstants.ENCODER_DISTANCE_PER_PULSE * DriveConstants.GEAR_RATIO
+              * Units.inchesToMeters(DriveConstants.DRIVE_WHEEL_DIAMETER * Math.PI)),
+          frontRight.getSelectedSensorPosition() / (DriveConstants.ENCODER_DISTANCE_PER_PULSE * DriveConstants.GEAR_RATIO
+              * Units.inchesToMeters(DriveConstants.DRIVE_WHEEL_DIAMETER * Math.PI)));
     }
 
     private void configureTalon(TalonFX talonFX){
