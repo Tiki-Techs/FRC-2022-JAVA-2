@@ -11,10 +11,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.DriveDistance;
 import frc.robot.commands.StopClimb;
@@ -43,18 +43,17 @@ public class RobotContainer {
   private final Climb m_climb = new Climb();
   private final Index m_index = new Index();
 
-  private final double shooterSpeed = SmartDashboard.getNumber("shooter speed", -3000);
-
   private XboxController driverController = new XboxController(Constants.DRIVER_CONTROLLER_ID);
   private XboxController mechController = new XboxController(Constants.MECH_CONTROLLER_ID);
 
-  //auto commands(too complicated to make actual commands for everything so doing this complicated inlining stuff)
+  //auto commands(too compo*/9/////////licated to make actual commands for everything so doing this complicated inlining stuff)
   private final Command m_simpleAuto = 
-    new DriveDistance(1000, .5, 1, m_robotDrive); //drive off tarmac :)
+    new DriveDistance(1000, 0, -.7, m_robotDrive); //Drive off tarmac, bot facing forward
+    // new InstantCommand();
   
   private final Command m_singleBallAuto = 
     new SequentialCommandGroup(
-      new RunCommand(()-> m_flywheel.setVelocity(-2700), m_flywheel).withTimeout(3), //start shooter
+      new RunCommand(()-> m_flywheel.setVelocity(-2700), m_flywheel).withTimeout(4), //start shooter
       // new RunCommand(()-> m_flywheel.setVelocity(-2600), m_flywheel).withInterrupt(m_flywheel.isOnTarget()), //start shooter
       new ParallelCommandGroup( //shoot ball
         new RunCommand(()-> m_flywheel.setVelocity(-2700), m_flywheel),
@@ -62,31 +61,63 @@ public class RobotContainer {
         // new RunCommand(() -> m_index.startIndexMotor(-0.7), m_index)).withInterrupt(m_flywheel.isNotOnTarget()),
         new RunCommand(() -> m_index.startIndexMotor(-0.7), m_index)).withTimeout(2),
       new InstantCommand(()-> m_index.stopIndexMotor(), m_index),
-      new DriveDistance(1000, -.2, 1, m_robotDrive), //drive off tarmac
-      new DriveDistance(0, 0, 0, m_robotDrive) //drive off tarmac
-      //new DriveDistance(200, -.2, 0, m_robotDrive)
+      new DriveDistance(1400, 0, .6, m_robotDrive) //drive off tarmac
      );
 
-  // private final Command m_doubleBallAuto = 
-  //   new SequentialCommandGroup(
-  //     new SequentialCommandGroup( //extends and runs intake
-  //       new InstantCommand(m_intake::extendIntake, m_intake), 
-  //       new RunCommand(() -> m_intake.startIntakeMotor(.9), m_intake)),
-  //     new DriveDistance(1, .5, m_robotDrive), //Drive into ball
-  //     new DriveDistance(1, -0.5, m_robotDrive),//drive back into wall
-  //     new RunCommand(()-> m_flywheel.setVelocity(-3000), m_flywheel).withInterrupt(m_flywheel.isOnTarget()), //start shooter
-  //     new ParallelCommandGroup( //shoot balls
-  //       new RunCommand(()-> m_flywheel.setVelocity(-3000), m_flywheel),
-  //       new RunCommand(() -> m_intake.startIntakeMotor(0.9), m_intake),
-  //       new RunCommand(() -> m_index.startIndexMotor(-0.7), m_index)).withInterrupt(m_flywheel.isNotOnTarget()),
-  //     new InstantCommand(()-> m_index.stopIndexMotor(), m_intake),
-  //     new RunCommand(()-> m_flywheel.setVelocity(-3000), m_flywheel).withInterrupt(m_flywheel.isOnTarget()),
-  //     new ParallelCommandGroup(
-  //       new RunCommand(()-> m_flywheel.setVelocity(-3000), m_flywheel),
-  //       new RunCommand(() -> m_intake.startIntakeMotor(0.9), m_intake),
-  //       new RunCommand(() -> m_index.startIndexMotor(-0.7), m_index)).withInterrupt(m_flywheel.isNotOnTarget()),
-  //     new DriveDistance(1, .4, m_robotDrive) //drive off tarmac
-  //   );
+  private final Command m_doubleBallAuto = 
+    new SequentialCommandGroup(
+      new InstantCommand(m_intake::extendIntake,m_intake),
+      new ParallelCommandGroup(
+        new DriveDistance(700, 0, -.7, m_robotDrive),
+        new RunCommand(()->m_intake.startIntakeMotor(-0.9)).withTimeout(3)
+      ),
+      new InstantCommand(m_intake::retractIntake,m_intake),
+      new InstantCommand(m_intake::stopIntakeMotor, m_intake),
+      new DriveDistance(1000, 0, .8, m_robotDrive),
+      new DriveDistance(1050, .6, 0, m_robotDrive), //Turn around bot
+      new DriveDistance(700, 0, -.7, m_robotDrive), //Turn around bot
+      new RunCommand(()-> m_flywheel.setVelocity(-2700), m_flywheel).withTimeout(2), //start shooter
+      new ParallelCommandGroup( //shoot ball
+        new RunCommand(()-> m_flywheel.setVelocity(-2700), m_flywheel),
+        new RunCommand(()-> m_intake.startIntakeMotor(-0.7), m_intake),
+        new RunCommand(() -> m_index.startIndexMotor(-0.7), m_index)).withTimeout(.3),
+      new InstantCommand(m_index::stopIndexMotor, m_index),
+      new InstantCommand(m_intake::stopIntakeMotor, m_intake),
+      new RunCommand(()-> m_flywheel.setVelocity(-2700), m_flywheel).withTimeout(2), //start shooter
+      new ParallelCommandGroup( //+pytt2ttshoot ball
+        new RunCommand(()-> m_flywheel.setVelocity(-2700), m_flywheel),
+        new RunCommand(()-> m_intake.startIntakeMotor(-0.7), m_intake),
+        new RunCommand(() -> m_index.startIndexMotor(-0.7), m_index)).withTimeout(.3),
+      new InstantCommand(m_index::stopIndexMotor, m_index),
+      new DriveDistance(1250, 0, .6, m_robotDrive)
+    );
+
+    // private final Command m_safeTwoBallAuto = 
+    // new SequentialCommandGroup(
+    //   new RunCommand(()-> m_flywheel.setVelocity(-2700), m_flywheel).withTimeout(3), //start shooter
+    //   new ParallelCommandGroup( //shoot ball
+    //     new RunCommand(()-> m_flywheel.setVelocity(-2700), m_flywheel),
+    //     new RunCommand(() -> m_index.startIndexMotor(-0.7), m_index)).withTimeout(.5),
+    //   new InstantCommand(m_index::stopIndexMotor, m_index), 
+    //   new InstantCommand(m_flywheel::stop,m_flywheel),
+    //   new DriveDistance(500, 0, .8, m_robotDrive), //away from fender
+    //   new DriveDistance(950, .6, 0, m_robotDrive), //Turn around bot
+    //   new InstantCommand(m_intake::extendIntake, m_intake),
+    //   new RunCommand(()-> m_intake.startIntakeMotor(-0.7), m_intake),
+    //   new DriveDistance(800, 0, .7, m_robotDrive),//drive to ball
+    //   new InstantCommand(m_intake::retractIntake,m_intake),
+    //   new InstantCommand(m_intake::stopIntakeMotor, m_intake),
+    //   new DriveDistance(1000, 0, .8, m_robotDrive), //drive backward toward
+    //   new DriveDistance(1050, .6, 0, m_robotDrive), //Turn around bot
+    //   new DriveDistance(700, 0, -.7, m_robotDrive), //
+    //   new RunCommand(()-> m_flywheel.setVelocity(-2700), m_flywheel).withTimeout(2), //start shooter
+    //   new ParallelCommandGroup( //shoot ball
+    //     new RunCommand(()-> m_flywheel.setVelocity(-2700), m_flywheel),
+    //     new RunCommand(()-> m_intake.startIntakeMotor(-0.7), m_intake),
+    //     new RunCommand(() -> m_index.startIndexMotor(-0.7), m_index)).withTimeout(.3),
+    //   new InstantCommand(m_index::stopIndexMotor, m_index),
+    //   new InstantCommand(m_intake::stopIntakeMotor, m_intake)    
+    //   );
       
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -94,7 +125,6 @@ public class RobotContainer {
     SmartDashboard.putData(m_intake);
     SmartDashboard.putData(m_climb);
 
-    
     // Configure the button bindings
     configureButtonBindings();
 
@@ -111,7 +141,7 @@ public class RobotContainer {
     //Run climb off second controller's joysticks
     m_climb.setDefaultCommand(
        new RunCommand(
-         () -> m_climb.runClimb(mechController.getRightY(), mechController.getLeftY()), m_climb));
+         () -> m_climb.runClimb(mechController.getLeftY()), m_climb));
   }
   /**
    * Use this method to define your button->command mappings. Buttons can be created by
@@ -121,8 +151,6 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
 
-    
-
     // new JoystickButton(mechController, 10)
     //   .whenPressed(new SequentialCommandGroup(
     //     new InstantCommand(m_climb::resetClimbEncoders, m_climb),
@@ -130,7 +158,10 @@ public class RobotContainer {
     //   ));
 
     new JoystickButton(mechController, 5) 
-      .whileActiveOnce(new RunCommand(()-> m_flywheel.setVel(-2500, 0.9), m_flywheel)); 
+      .whileActiveOnce(new RunCommand(()-> m_flywheel.setVel(-2600, 0.9), m_flywheel)); 
+
+    new JoystickButton(driverController, 6) 
+      .whileActiveOnce(new RunCommand(()-> m_flywheel.setVel(-2600, 0.9), m_flywheel));
 
     new JoystickButton(mechController, 6)
       .whileActiveOnce(new RunCommand(()-> m_flywheel.setSpeed(-0.4), m_flywheel));
@@ -169,11 +200,13 @@ public class RobotContainer {
         ()-> m_intake.isIntakeOut()));
 
     new JoystickButton(mechController, 1) //Mech A Button
-      .whileActiveOnce(new ParallelCommandGroup(
-        new RunCommand(() -> m_index.startIndexMotor(-0.7), m_index),//.withInterrupt(m_flywheel.isNotOnTarget()),
-        new RunCommand(() -> m_intake.startIntakeMotor(-0.7), m_intake)).withInterrupt(m_flywheel.isNotOnTarget()));
-
-    // new JoystickButton(mechController, 1) //A Button
+      .whileActiveOnce(//new SequentialCommandGroup(
+        new ParallelCommandGroup(
+          new RunCommand(() -> m_intake.startIntakeMotor(-0.7), m_intake),
+          new RunCommand(() -> m_index.startIndexMotor(-0.3), m_index)));
+        //new RunCommand(() -> m_intake.startIntakeMotor(-0.7), m_intake)
+  
+          // new JoystickButton(mechController, 1) //A Button
     //   .whileActiveContinuous(new ConditionalCommand(
     //     new ParallelCommandGroup(
     //       new RunCommand(() -> m_index.startIndexMotor(-0.7), m_index),
@@ -203,43 +236,9 @@ public class RobotContainer {
     new JoystickButton(driverController, 9) //left joystick button
       .whenPressed(new ConditionalCommand(new InstantCommand(m_shifter::setTorque,m_shifter),
         new InstantCommand(m_shifter::setSpeed,m_shifter), ()->m_shifter.isInSpeed()));
-  
-    new JoystickButton(driverController, 3) //X
-      .whenPressed(new InstantCommand(m_climb::climbRelease,m_climb));
-
-    new JoystickButton(driverController, 4) //Y
-      .whenPressed(new InstantCommand(m_climb::climbReset, m_climb));
 
     new JoystickButton(mechController, 10)
       .whenPressed(new InstantCommand(m_climb::changeClimbMode,m_climb));
-
-    //Extra code for climb in case need second controllers joysticks(just so i dont have to rewrite)
-    // new JoystickButton(mechController, 1) //A Button
-    //   .whileActiveOnce(new RunCommand(() -> m_climb.rightClimbDown(.3), m_climb));
-    // new JoystickButton(mechController, 2) //B Button
-    //   .whileActiveOnce(new RunCommand(() -> m_climb.rightClimbUp(.3), m_climb));
-    // new JoystickButton(mechController, 3) //x Button
-    //   .whileActiveOnce(new RunCommand(() -> m_climb.leftClimbDown(.3), m_climb));
-    // new JoystickButton(mechController, 4) //Y Button
-    //   .whileActiveOnce(new RunCommand(() -> m_climb.leftClimbUp(.3), m_climb));
-
-    // new JoystickButton(mechController, 6) //RB  (Right Trigger Button)
-    //   .whileActiveOnce(new SequentialCommandGroup(
-    //     new RunCommand(()-> m_flywheel.setVelocity(-2600), m_flywheel).withTimeout(1), //speed up shooter
-    //     new WaitUntilCommand(m_flywheel.isOnTarget()),
-    //     new ParallelCommandGroup(
-    //       new RunCommand(()-> m_flywheel.setVelocity(-2600), m_flywheel), //continue running shooter
-    //       new RunCommand(() -> m_intake.startIntakeMotor(-0.9), m_intake), //run intake and index until shoots
-    //       new RunCommand(() -> m_index.startIndexMotor(-0.7), m_index)).withInterrupt(m_flywheel.isNotOnTarget()),
-    //     new InstantCommand(()-> m_intake.stopIntakeMotor(), m_intake),
-    //     new InstantCommand(()-> m_index.stopIndexMotor(), m_intake), //stop index then repeat steps for second ball
-    //     new RunCommand(()-> m_flywheel.setVelocity(-2600), m_flywheel).withTimeout(1),
-    //     new WaitUntilCommand(m_flywheel.isOnTarget()),
-    //     new ParallelCommandGroup(       
-    //       new RunCommand(()-> m_flywheel.setVelocity(-2600), m_flywheel),
-    //       new RunCommand(() -> m_intake.startIntakeMotor(-0.9), m_intake),
-    //       new RunCommand(() -> m_index.startIndexMotor(-0.7), m_index)).withInterrupt(m_flywheel.isNotOnTarget())
-    //   ));
 
     // new JoystickButton(mechController, 5) //LB (Left Trigger Button)
     //   .whenPressed(new ConditionalCommand(

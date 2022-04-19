@@ -4,8 +4,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -13,11 +11,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  *
  * <p>It is advised to statically import this class (or one of its inner classes) wherever the
  * constants are needed, to reduce verbosity.
- */
-public final class Constants {
+ */ public final class Constants {
     public static final class ShooterConstants{
         public static final double kP = 0.00005;
-        public static final double kFeedForward = 0.000195;
+        public static final double kFeedForward = 0.00023;
         public static final double kMaxOutput = 1;
         public static final double kMinOutput = -1;
 
@@ -41,7 +38,7 @@ public final class Constants {
 
     public static final class ClimbConstants{
         public static final int LEFT_CLIMB_MOTOR_ID = 8;
-        //public static final int RIGHT_CLIMB_MOTOR_ID = 8;
+        public static final int RIGHT_CLIMB_MOTOR_ID = 9;
         public static final int CLIMB_FORWARD_CHANNEL = 0;
         public static final int CLIMB_REVERSE_CHANNEL = 7;
         public static final double CLIMB_STOP_POINT = 0;

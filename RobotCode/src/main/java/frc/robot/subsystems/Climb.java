@@ -4,8 +4,6 @@
 
 package frc.robot.subsystems;
 
-import javax.swing.RowFilter.ComparisonType;
-
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -20,41 +18,39 @@ import frc.robot.Constants.ClimbConstants;
 public class Climb extends SubsystemBase {
   /** Creates a new Climb. */
   private CANSparkMax leftClimbMotor = new CANSparkMax(ClimbConstants.LEFT_CLIMB_MOTOR_ID, MotorType.kBrushless);
-  //private CANSparkMax rightClimbMotor = new CANSparkMax(ClimbConstants.RIGHT_CLIMB_MOTOR_ID, MotorType.kBrushless);
+  private CANSparkMax rightClimbMotor = new CANSparkMax(ClimbConstants.RIGHT_CLIMB_MOTOR_ID, MotorType.kBrushless);
 
   private RelativeEncoder leftClimbEncoder = leftClimbMotor.getEncoder();
-  //private RelativeEncoder rightClimbEncoder = rightClimbMotor.getEncoder();
+  private RelativeEncoder rightClimbEncoder = rightClimbMotor.getEncoder();
 
   private double rightPos;
   private double leftPos;
 
 
-  private DoubleSolenoid climbPancake = 
-    new DoubleSolenoid(2, PneumaticsModuleType.CTREPCM, ClimbConstants.CLIMB_FORWARD_CHANNEL, ClimbConstants.CLIMB_REVERSE_CHANNEL);
+  // private DoubleSolenoid climbPancake = 
+  //   new DoubleSolenoid(2, PneumaticsModuleType.CTREPCM, ClimbConstants.CLIMB_FORWARD_CHANNEL, ClimbConstants.CLIMB_REVERSE_CHANNEL);
   public Climb() {
     //setup encoders
     leftClimbMotor.restoreFactoryDefaults();
-    //rightClimbMotor.restoreFactoryDefaults();
+    rightClimbMotor.restoreFactoryDefaults();
 
     leftClimbEncoder.setPosition(0);
-    //rightClimbEncoder.setPosition(0);
+    rightClimbEncoder.setPosition(0);
 
-   // rightClimbMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
+    rightClimbMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
     leftClimbMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
-    //leftClimbMotor.setSmartCurrentLimit(1);
 
+    rightClimbMotor.follow(leftClimbMotor, true);
       //set climb pancake to forward
-    climbPancake.set(Value.kForward);
   }
 
-  public void runClimb(double rspeed, double lspeed){
-    leftClimbMotor.set(lspeed);
-    //rightClimbMotor.set(rspeed);
+  public void runClimb(double speed){
+    leftClimbMotor.set(speed);
   }
 
   public void stopClimb(){
     leftClimbMotor.set(0);
-    //rightClimbMotor.set(0);
+    rightClimbMotor.set(0);
   }
 
   public void changeClimbMode(){
@@ -64,7 +60,7 @@ public class Climb extends SubsystemBase {
 
   public void resetClimbEncoders(){
     leftClimbEncoder.setPosition(0);
-    //rightClimbEncoder.setPosition(0);
+    rightClimbEncoder.setPosition(0);
   }
 
   public double getAvgClimbPos(){
@@ -77,32 +73,10 @@ public class Climb extends SubsystemBase {
     return getAvgClimbPos() > ClimbConstants.CLIMB_STOP_POINT;
   }
 
-  public void climbRelease(){
-    climbPancake.set(Value.kReverse);
-  }
-  public void climbReset(){
-    climbPancake.set(Value.kForward);
-  }
-  // public void rightClimbDown(double speed){
-  //   rightClimbMotor.set(-speed);
-  // }
-
-  // public void rightClimbUp(double speed){
-  //   rightClimbMotor.set(speed);
-  // }
-
-  // public void leftClimbDown(double speed){
-  //   leftClimbMotor.set(speed);
-  // }
-
-  // public void leftClimbUp(double speed){
-  //   leftClimbMotor.set(-speed);
-  // }
-
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    //SmartDashboard.putNumber("rightClimbEncoder", rightClimbEncoder.getPosition());
+    SmartDashboard.putNumber("rightClimbEncoder", rightClimbEncoder.getPosition());
     SmartDashboard.putNumber("leftClimbEncoder", leftClimbEncoder.getPosition());
     // SmartDashboard.putNumber("climbCurrent", leftClimbMotor.getOutputCurrent());
     // SmartDashboard.putNumber("climbVoltage", leftClimbMotor.getBusVoltage());
