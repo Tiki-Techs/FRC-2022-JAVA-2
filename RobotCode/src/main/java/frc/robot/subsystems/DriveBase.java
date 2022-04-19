@@ -9,6 +9,7 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
+import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -39,6 +40,7 @@ public class DriveBase extends SubsystemBase {
     m_rightMaster.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
     m_leftMaster.setSelectedSensorPosition(0);
     m_rightMaster.setSelectedSensorPosition(0);
+
   }
 
   //Differential arcadeDrive function for calling in Container
@@ -58,8 +60,8 @@ public class DriveBase extends SubsystemBase {
     m_rightMaster.setSelectedSensorPosition(0);
   }
 
-  public double getAverageEncoderDistance(){
-    return (m_rightMaster.getSelectedSensorPosition() + m_leftMaster.getSelectedSensorPosition()) / 2;
+  public DifferentialDriveWheelSpeeds getWheelSpeeds(){
+    return new DifferentialDriveWheelSpeeds();
   }
   @Override
   public void periodic() {

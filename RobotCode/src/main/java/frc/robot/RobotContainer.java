@@ -46,7 +46,7 @@ public class RobotContainer {
   private XboxController driverController = new XboxController(Constants.DRIVER_CONTROLLER_ID);
   private XboxController mechController = new XboxController(Constants.MECH_CONTROLLER_ID);
 
-  //auto commands(too compo*/9/////////licated to make actual commands for everything so doing this complicated inlining stuff)
+  //auto commands(too complicated to make actual commands for everything so doing this complicated inlining stuff)
   private final Command m_simpleAuto = 
     new DriveDistance(1000, 0, -.7, m_robotDrive); //Drive off tarmac, bot facing forward
     // new InstantCommand();
