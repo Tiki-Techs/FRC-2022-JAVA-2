@@ -4,8 +4,6 @@
 
 package frc.robot.subsystems;
 
-import java.sql.Driver;
-
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
@@ -13,19 +11,17 @@ import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-import com.fasterxml.jackson.databind.util.RootNameLookup;
 
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 
 
@@ -80,10 +76,13 @@ public class DriveBase extends SubsystemBase {
       // Update the odometry in the periodic block
 
       m_odometry.update(m_gyro.getRotation2d(),
-          frontLeft.getSelectedSensorPosition() / (DriveConstants.ENCODER_DISTANCE_PER_PULSE * DriveConstants.GEAR_RATIO
-              * Units.inchesToMeters(DriveConstants.DRIVE_WHEEL_DIAMETER * Math.PI)),
-          frontRight.getSelectedSensorPosition() / (DriveConstants.ENCODER_DISTANCE_PER_PULSE * DriveConstants.GEAR_RATIO
-              * Units.inchesToMeters(DriveConstants.DRIVE_WHEEL_DIAMETER * Math.PI)));
+          frontLeft.getSelectedSensorPosition() / (DriveConstants.ENCODER_DISTANCE_PER_PULSE * DriveConstants.GEAR_RATIO)
+              * Units.inchesToMeters(DriveConstants.DRIVE_WHEEL_DIAMETER * Math.PI),
+          frontRight.getSelectedSensorPosition() / (DriveConstants.ENCODER_DISTANCE_PER_PULSE * DriveConstants.GEAR_RATIO)
+              * Units.inchesToMeters(DriveConstants.DRIVE_WHEEL_DIAMETER * Math.PI));
+
+      SmartDashboard.putNumber("Left Encoder", frontLeft.getSelectedSensorPosition());
+      SmartDashboard.putNumber("Right Encoder", frontRight.getSelectedSensorPosition());
     }
 
     private void configureTalon(TalonFX talonFX){
@@ -109,10 +108,10 @@ public class DriveBase extends SubsystemBase {
      */
     public DifferentialDriveWheelSpeeds getWheelSpeeds() {
       return new DifferentialDriveWheelSpeeds(
-          (frontLeft.getSelectedSensorPosition() * 10) / (DriveConstants.ENCODER_DISTANCE_PER_PULSE * DriveConstants.GEAR_RATIO
-              * Units.inchesToMeters(DriveConstants.DRIVE_WHEEL_DIAMETER * Math.PI)),
-          (frontRight.getSelectedSensorVelocity() * 10) / (DriveConstants.ENCODER_DISTANCE_PER_PULSE * DriveConstants.GEAR_RATIO
-              * Units.inchesToMeters(DriveConstants.DRIVE_WHEEL_DIAMETER * Math.PI)));
+          (frontLeft.getSelectedSensorPosition() * 10) / (DriveConstants.ENCODER_DISTANCE_PER_PULSE * DriveConstants.GEAR_RATIO)
+              * Units.inchesToMeters(DriveConstants.DRIVE_WHEEL_DIAMETER * Math.PI),
+          (frontRight.getSelectedSensorVelocity() * 10) / (DriveConstants.ENCODER_DISTANCE_PER_PULSE * DriveConstants.GEAR_RATIO)
+              * Units.inchesToMeters(DriveConstants.DRIVE_WHEEL_DIAMETER * Math.PI));
     }
 
     /**
@@ -125,7 +124,7 @@ public class DriveBase extends SubsystemBase {
       m_odometry.resetPosition(pose, m_gyro.getRotation2d());
     }
 
-    /**
+    /**%
      * Drives the robot using arcade controls.
      *
      * @param fwd the commanded forward movement

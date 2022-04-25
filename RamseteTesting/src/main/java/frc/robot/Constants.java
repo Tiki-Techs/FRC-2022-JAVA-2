@@ -28,21 +28,23 @@ public final class Constants {
 
         public static final double GEAR_RATIO = 10.71;
         public static final int DRIVE_ENCODER_CPR = 2048;
+        public static final double ENCODER_TICKS_PER_ROT = 
+            (int) Math.round(DRIVE_ENCODER_CPR * GEAR_RATIO);
         public static final double DRIVE_WHEEL_DIAMETER = 4;
         public static final double ENCODER_DISTANCE_PER_PULSE = 
             (DRIVE_WHEEL_DIAMETER * Math.PI) / (double) DRIVE_ENCODER_CPR;
 
-        public static final double ksVolts = 0;
-        public static final double kvVoltSecondsPerMeter = 0;
-        public static final double kaVoltSecondsSquaredPerMeter = 0;
-        public static final double kPDriveVel = 0;
+        public static final double ksVolts = 0.21013;
+        public static final double kvVoltSecondsPerMeter = 3.732;
+        public static final double kaVoltSecondsSquaredPerMeter = 0.44425;
+        public static final double kPDriveVel = 4.7036;
 
-        public static final double kTrackwidthMeters = 0;
+        public static final double kTrackwidthMeters = 0.5842;
         public static final DifferentialDriveKinematics kDriveKinematics = 
             new DifferentialDriveKinematics(kTrackwidthMeters);
 
-        public static final double kMaxSpeedMetersPerSecond = 0;
-        public static final double kMaxAccelerationPerSecondSquared = 0;
+        public static final double kMaxSpeedMetersPerSecond = 3;
+        public static final double kMaxAccelerationPerSecondSquared = 3;
 
         public static final double kRamseteB = 2;
         public static final double kRamseteZeta = 0.7;
